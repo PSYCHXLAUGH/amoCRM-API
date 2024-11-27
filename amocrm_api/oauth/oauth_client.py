@@ -1,7 +1,7 @@
 # amocrm_api/oauth/oauth_client.py
 import requests
 from typing import Dict
-from ._exceptions import OAuthError
+from .exceptions import OAuthError
 from .oauth_config import OAuthConfig
 
 class OAuthClient:

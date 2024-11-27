@@ -20,7 +20,7 @@ class OAuthMiddleware:
         # Проверка срока действия токена и его обновление, если необходимо
         # Для упрощения здесь это будет базовая проверка
 
-    def make_authenticated_request(self, endpoint: str, method: str = "GET", data: Dict = None):
+    def make_authenticated_request(self, endpoint: str, method: str = "GET", data: dict = None):
         """
         Выполнение запросов с проверкой на авторизацию.
         """

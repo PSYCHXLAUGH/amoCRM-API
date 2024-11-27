@@ -10,9 +10,10 @@ class OAuthFactory:
     """
 
     @staticmethod
-    def create_oauth_client() -> OAuthClient:
+    def create_oauth_client(OAuthConfig: OAuthConfig = OAuthConfig()) -> OAuthClient:
         """
         Создает и возвращает OAuthClient.
+        Можно передать свой, или подтянуть из переменных окружения
         """
-        config = OAuthConfig()
+        config = OAuthConfig
         return OAuthClient(config)
