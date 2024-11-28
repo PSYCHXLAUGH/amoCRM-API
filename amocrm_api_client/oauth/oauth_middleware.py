@@ -36,7 +36,7 @@ class OAuthMiddleware:
 
         # Проверяем наличие токенов
         if not self._oauth_client.access_token and not self._oauth_client.longlive_token:
-            raise OAuthError("Credentials not found")
+            raise OAuthError("credentials not found")
 
         # Функция для проверки истечения срока действия токенов
         def check_token_expiration(token, token_type):
@@ -73,3 +73,6 @@ class OAuthMiddleware:
         """
         self._ensure_authenticated()
         return self._oauth_client._make_authenticated_request(endpoint, method, data)
+
+    def make_file_upload(self):
+        pass

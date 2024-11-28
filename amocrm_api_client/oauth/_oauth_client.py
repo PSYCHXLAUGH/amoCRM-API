@@ -16,16 +16,10 @@ class OAuthClient:
         Параметры:
             config (OAuthConfig): Конфигурация OAuth для клиента.
         """
-
         self.config: OAuthConfig = config
         self.access_token: Optional[str] = None
         self.refresh_token: Optional[str] = None
-        self.longlive_token: Optional[str] = None
-        self.api_key: Optional[str] = None
         self.base_url: Optional[str] = None
-
-
-
 
     def get_authorization_url(self, state: Optional[str] = None, mode: Optional[str] = None) -> str:
         """
@@ -62,21 +56,6 @@ class OAuthClient:
         """
         pass
 
-    def set_oauth_secrets(self, access_token, refresh_token, subdomain) -> bool:
-
-        self.base_url = f"https://{subdomain}.amocrm.ru"
-        self.access_token = access_token
-        self.refresh_token = refresh_token
-
-        pass
-
-    def set_longlive_token(self, longlive_token: str, subdomain: str) -> bool:
-
-        self.base_url = f"https://{subdomain}.amocrm.ru"
-        self.longlive_token = longlive_token
-
-        pass
-
     def get_access_token(self, authorization_code: str, subdomain: str) -> Dict[str, str]:
         """
         Обмен авторизационного кода на токен доступа.
@@ -108,7 +87,7 @@ class OAuthClient:
         self.refresh_token = token_data.get("refresh_token")
         return token_data
 
-    def _refresh_access_token(self) -> Dict[str, str]:
+    def refresh_access_token(self) -> Dict[str, str]:
         """
         Обновление токена доступа с использованием refresh токена.
 
@@ -134,7 +113,7 @@ class OAuthClient:
         self.refresh_token = token_data.get("refresh_token")
         return token_data
 
-    def _make_authenticated_request(self, endpoint: str, method: str = "GET", data: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+    def make_authenticated_request(self, endpoint: str, method: str = "GET", data: Optional[Dict[str, str]] = None) -> Dict[str, str]:
         """
         Выполнение запросов к API с использованием access token.
 
@@ -146,15 +125,12 @@ class OAuthClient:
         Возвращаемое значение:
             Dict[str, str]: Ответ от сервера в виде JSON-словаря.
         """
-
         headers: Dict[str, str] = {
-            "Authorization": f"Bearer {self.longlive_token if self.longlive_token else self.access_token}",
+            "Authorization": f"Bearer {self.access_token}",
             "Content-Type": "application/json"
         }
 
         url: str = f"{self.base_url}/{endpoint}"
-
-        # TODO: Добавить еще методов
 
         if method == "GET":
             response = requests.get(url, headers=headers)
@@ -166,12 +142,10 @@ class OAuthClient:
 
         return response.json()
 
-
-    def _is_token_expired(self, token) -> bool:
-        if token is None:
-            return None
-
-        jwt = _decode_jwt(token)
-        jwt_exp = jwt.get('exp')
-
+    def is_token_expired(self):
+        decode_jwt = _decode_jwt(self.access_token)
+        jwt_exp = decode_jwt['exp']
         return _compare_timestamp_with_current(jwt_exp)
+
+
+        pass
