@@ -12,7 +12,7 @@ class HmacAuthMiddleware:
     Middleware для авторизации в API AmoCRM с использованием подписи.
     """
 
-    def __init__(self, secret: str, account_id: str):
+    def __init__(self, secret: str, account_id: str): # сделать такой же конфиг как для oauth_middleware.py
         self.secret = secret
         self.account_id = account_id
 

@@ -2,7 +2,7 @@ import os
 from dataclasses import dataclass
 
 @dataclass
-class OAuthConfig: # TODO: Добавить поддержку долгосрочных токенов
+class OAuthConfig:
     """
     Класс конфигурации OAuth 2.0 для интеграции с AmoCRM API.
 
@@ -46,3 +46,19 @@ class OAuthConfig: # TODO: Добавить поддержку долгосро�
             self.client_secret = os.getenv("AMOCRM_CLIENT_SECRET", self.client_secret)
         if not self.redirect_uri:
             self.redirect_uri = os.getenv("AMOCRM_REDIRECT_URI", self.redirect_uri)
+
+
+@dataclass
+class AmojoConfig:
+    channel_id: str = ""
+    channel_secret: str =""
+    origin_code: str = ""
+
+
+    def __post_init__(self):
+        if not self.channel_id:
+            self.channel_id = os.getenv("AMOJO_CHANNEL_ID", self.channel_id)
+        if not self.channel_secret:
+            self.client_secret = os.getenv("AMOJO_CHANNEL_SECRET", self.channel_secret)
+        if not self.origin_code:
+            self.origin_code = os.getenv("AMOJO_ORIGIN_CODE", self.origin_code)

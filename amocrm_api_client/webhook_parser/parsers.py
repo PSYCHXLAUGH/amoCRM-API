@@ -63,8 +63,10 @@ class DigitalPipelineParser:
 class WidgetRequestParser:
     pass
 
+
 class AmoMarketParser:
     pass
+
 
 class DisposibleTokenParser:
     pass

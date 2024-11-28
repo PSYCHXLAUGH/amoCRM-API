@@ -1,5 +1,5 @@
 from ._oauth_client import OAuthClient
-from .exceptions import OAuthError
+from .exceptions import OAuthError, OAuthInvalidTokenError
 
 class OAuthMiddleware:
     """
@@ -21,9 +21,9 @@ class OAuthMiddleware:
         Параметры:
             oauth_client (OAuthClient): Экземпляр клиента OAuth, используемый для выполнения запросов.
         """
-        self.oauth_client = oauth_client
+        self._oauth_client = oauth_client
 
-    def ensure_authenticated(self):
+    def _ensure_authenticated(self):
         """
         Проверка токена и обновление его, если необходимо.
 
@@ -34,23 +34,24 @@ class OAuthMiddleware:
             OAuthError: Если токен доступа отсутствует или недействителен.
         """
 
-        # TODO: Добавить функционал для longlive токенов
+        # Проверяем наличие токенов
+        if not self._oauth_client.access_token and not self._oauth_client.longlive_token:
+            raise OAuthError("Credentials not found")
 
+        # Функция для проверки истечения срока действия токенов
+        def check_token_expiration(token, token_type):
+            if token and self._oauth_client._is_token_expired(token):
 
-        # Проверка срока действия токена и его обновление, если необходимо
-        # Для упрощения здесь это будет базовая проверка.
-        # В реальном приложении можно добавить логику для проверки истечения срока действия токена
-        # и выполнения запроса на обновление токена через oauth_client.
+                if token_type == "access_token":
+                    self._oauth_client._refresh_access_token()
 
-        if self.oauth_client.access_token is None and self.oauth_client.longlive_token is None:
-            raise OAuthError("Don't have jwt tokens")
+                raise OAuthInvalidTokenError(f"{token_type} has been expired")
 
-        if self.oauth_client.longlive_token:
-            if self.oauth_client.is_token_expired(self.oauth_client.longlive_token):
-                raise OAuthError("Token has been expired")
+        # Проверка истечения срока действия longlive_token
+        check_token_expiration(self._oauth_client.longlive_token, "longlive_token")
 
-        if self.oauth_client.is_token_expired(self.oauth_client.access_token):
-            self.oauth_client.refresh_access_token()
+        # Проверка истечения срока действия access_token
+        check_token_expiration(self._oauth_client.access_token, "access_token")
 
     def make_authenticated_request(self, endpoint: str, method: str = "GET", data: dict = None):
         """
@@ -70,5 +71,5 @@ class OAuthMiddleware:
         Исключения:
             OAuthError: Если токен невалиден или недействителен.
         """
-        self.ensure_authenticated()
-        return self.oauth_client.make_authenticated_request(endpoint, method, data)
+        self._ensure_authenticated()
+        return self._oauth_client._make_authenticated_request(endpoint, method, data)

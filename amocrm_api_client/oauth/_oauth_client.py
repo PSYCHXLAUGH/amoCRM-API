@@ -75,7 +75,6 @@ class OAuthClient:
         self.base_url = f"https://{subdomain}.amocrm.ru"
         self.longlive_token = longlive_token
 
-
         pass
 
     def get_access_token(self, authorization_code: str, subdomain: str) -> Dict[str, str]:
@@ -109,7 +108,7 @@ class OAuthClient:
         self.refresh_token = token_data.get("refresh_token")
         return token_data
 
-    def refresh_access_token(self) -> Dict[str, str]:
+    def _refresh_access_token(self) -> Dict[str, str]:
         """
         Обновление токена доступа с использованием refresh токена.
 
@@ -135,7 +134,7 @@ class OAuthClient:
         self.refresh_token = token_data.get("refresh_token")
         return token_data
 
-    def make_authenticated_request(self, endpoint: str, method: str = "GET", data: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+    def _make_authenticated_request(self, endpoint: str, method: str = "GET", data: Optional[Dict[str, str]] = None) -> Dict[str, str]:
         """
         Выполнение запросов к API с использованием access token.
 
@@ -155,6 +154,8 @@ class OAuthClient:
 
         url: str = f"{self.base_url}/{endpoint}"
 
+        # TODO: Добавить еще методов
+
         if method == "GET":
             response = requests.get(url, headers=headers)
         elif method == "POST":
@@ -165,7 +166,12 @@ class OAuthClient:
 
         return response.json()
 
-    def is_token_expired(self, token) -> bool:
+
+    def _is_token_expired(self, token) -> bool:
+        if token is None:
+            return None
+
         jwt = _decode_jwt(token)
-        jwt_exp = jwt['exp']
+        jwt_exp = jwt.get('exp')
+
         return _compare_timestamp_with_current(jwt_exp)
