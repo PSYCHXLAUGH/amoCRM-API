@@ -2,6 +2,7 @@ import requests
 from typing import Dict, Optional
 from .exceptions import OAuthError
 from .oauth_config import OAuthConfig
+from .._utils import _decode_jwt, _compare_timestamp_with_current
 
 class OAuthClient:
     """
@@ -140,3 +141,11 @@ class OAuthClient:
             raise OAuthError(f"Failed to make request to {url}: {response.text}")
 
         return response.json()
+
+    def is_token_expired(self):
+        decode_jwt = _decode_jwt(self.access_token)
+        jwt_exp = decode_jwt['exp']
+        return _compare_timestamp_with_current(jwt_exp)
+
+
+        pass

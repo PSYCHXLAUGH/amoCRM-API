@@ -1,7 +1,6 @@
 from ._oauth_client import OAuthClient
 from .oauth_config import OAuthConfig
 
-
 class OAuthFactory:
     """
     Фабрика для создания клиента OAuth.

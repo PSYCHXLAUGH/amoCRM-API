@@ -33,8 +33,6 @@ class MyIntegration:
         )
 
 
-
-
 # from amocrm_api.amojo.hmac_auth_middleware import HmacAuthMiddleware
 # # Конфигурация
 # secret = '5a44c5dff55f3c15a4cce8d7c4cc27e207c7e189'

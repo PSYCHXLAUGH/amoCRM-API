@@ -1,9 +1,6 @@
 import os
 from dataclasses import dataclass
 
-
-
-
 @dataclass
 class OAuthConfig: # TODO: Добавить поддержку долгосрочных токенов
     """

@@ -1,34 +1,45 @@
+![amoCRM API Library](.github/logo.png)
 
-# Структура модуля
+amoCRM API Python Library
 
-Библиотека для работы с API amocrm с разделением на подсистемы chats, files и v4. Используется следующая структура
-каталогов и файлов.
+---
 
-```
-amocrm_api/
-│
-├── __init__.py                # основной файл пакета, импортирует необходимые модули
-│
-├── chats/                     # модуль для работы с чатами
-│   ├── __init__.py            # инициализация модуля чатов
-│   ├── api.py                 # взаимодействие с API чатов (например, получение сообщений)
-│   └── utils.py               # вспомогательные функции для работы с чатами (например, парсинг)
-│
-├── files/                     # модуль для работы с файлами
-│   ├── __init__.py            # инициализация модуля файлов
-│   ├── api.py                 # взаимодействие с API для загрузки/получения файлов
-│   └── utils.py               # вспомогательные функции для работы с файлами
-│
-├── v4/                        # модуль для работы с API версии 4
-│   ├── __init__.py            # инициализация модуля версии 4
-│   ├── leads.py               # работа с лидами (например, создание, обновление)
-│   ├── contacts.py            # работа с контактами
-│   ├── companies.py           # работа с компаниями
-│   ├── tasks.py               # работа с контактами
-│   ├── events.py              # работа с компаниями
-│   ├── customers.py           # работа с компаниями
-│
-├── config.py                  # конфигурации для подключения к API (например, токен, URL)
-├── auth.py                    # авторизация, работа с токенами
-└── exceptions.py              # определение ошибок библиотеки
+
+# Examples
+
+
+```python
+from amocrm_api_client.oauth.oauth_factory import OAuthFactory
+from amocrm_api_client.oauth.oauth_config import OAuthConfig
+from amocrm_api_client.oauth.oauth_middleware import OAuthMiddleware
+
+class MyIntegration:
+    def __init__(self, client_id, client_secret, redirect_uri):
+
+        self.config = OAuthConfig(
+            client_id=client_id,
+            client_secret=client_secret,
+            redirect_uri=redirect_uri
+        )
+
+
+    def webhook_install(self, authorization_code, subdomain):
+        oauth_client = OAuthFactory.create_oauth_client(self.config)
+        self.oauth_middleware = OAuthMiddleware(oauth_client)
+        oauth_client.get_access_token(authorization_code=authorization_code, subdomain=subdomain)
+        self.oauth_middleware.make_authenticated_request(endpoint='api/v4/leads', method='GET')
+
+    def create_lead(self):
+
+        json_data = [
+            {
+                "name": "middleware"
+            }
+        ]
+
+        self.oauth_middleware.make_authenticated_request(
+            endpoint='api/v4/leads',
+            method="POST",
+            data=json_data
+        )
 ```
