@@ -64,13 +64,15 @@ class OAuthClient:
 
     def set_oauth_secrets(self, access_token, refresh_token, subdomain) -> bool:
 
+        self.base_url = f"https://{subdomain}.amocrm.ru"
         self.access_token = access_token
         self.refresh_token = refresh_token
-        self.base_url = f"https://{subdomain}.amocrm.ru"
 
         pass
 
-    def set_longlive_token(self, longlive_token: str) -> bool:
+    def set_longlive_token(self, longlive_token: str, subdomain: str) -> bool:
+
+        self.base_url = f"https://{subdomain}.amocrm.ru"
         self.longlive_token = longlive_token
         pass
 
@@ -160,10 +162,7 @@ class OAuthClient:
 
         return response.json()
 
-    def is_token_expired(self):
-        decode_jwt = _decode_jwt(self.access_token)
+    def is_token_expired(self, token):
+        decode_jwt = _decode_jwt(token)
         jwt_exp = decode_jwt['exp']
         return _compare_timestamp_with_current(jwt_exp)
-
-
-        pass

@@ -1,3 +1,6 @@
+from fontTools.misc.plistlib import end_string
+from uaclient.api.u.pro.security.fix.cve.plan.v1 import endpoint
+
 from amocrm_api_client.oauth.oauth_factory import OAuthFactory
 from amocrm_api_client.oauth.oauth_config import OAuthConfig
 from amocrm_api_client.oauth.oauth_middleware import OAuthMiddleware
@@ -32,6 +35,27 @@ class MyIntegration:
             method="POST",
             data=json_data
         )
+
+
+settings_integration = MyIntegration(
+    client_id="78c859ba-0490-4b75-b18b-97d096f520f8",
+    client_secret="D4ChhD9TEslSHMXin6T64xGvX6S7YD5qvffvtIipcXfVpFYT6XCF61p95QgVSrXp",
+    redirect_uri="https://7966-172-241-70-196.ngrok-free.app"
+)
+
+
+client = OAuthFactory.create_oauth_client(settings_integration.config)
+
+client.set_longlive_token(longlive_token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImY4NjhlZmIzNGRhYjZmZjJhZWRkODc5ZmNjZmUyMGI2ZTIxMzc5ZWI0MzEwZDNjYjYwOWUzNzIzYmIzNDRmZDBkY2MyNDMzZjk2Yzk4MDIwIn0.eyJhdWQiOiI3OGM4NTliYS0wNDkwLTRiNzUtYjE4Yi05N2QwOTZmNTIwZjgiLCJqdGkiOiJmODY4ZWZiMzRkYWI2ZmYyYWVkZDg3OWZjY2ZlMjBiNmUyMTM3OWViNDMxMGQzY2I2MDllMzcyM2JiMzQ0ZmQwZGNjMjQzM2Y5NmM5ODAyMCIsImlhdCI6MTczMjc5NDQwOCwibmJmIjoxNzMyNzk0NDA4LCJleHAiOjE3NDAwOTYwMDAsInN1YiI6IjkzNTQ2NzQiLCJncmFudF90eXBlIjoiIiwiYWNjb3VudF9pZCI6MzE5ODgwODIsImJhc2VfZG9tYWluIjoiYW1vY3JtLnJ1IiwidmVyc2lvbiI6Miwic2NvcGVzIjpbImNybSIsImZpbGVzIiwiZmlsZXNfZGVsZXRlIiwibm90aWZpY2F0aW9ucyIsInB1c2hfbm90aWZpY2F0aW9ucyJdLCJoYXNoX3V1aWQiOiIwNTIyYmNmNy0xYWYwLTRkNDYtOWUyMS00YTgxNmMzZDU4NjgiLCJhcGlfZG9tYWluIjoiYXBpLWIuYW1vY3JtLnJ1In0.k2pvG2MN30S0JzBu0Q9CEIVFTo8FteE3d9ujE3tv0NZwWFr7Zv7_N4O6i_CrI68UB6OCxrisiEaefDmUmJ4tfyzYrmXxDflb2UAF6Y0kDIOBbGgLHhcYs170uTJ4ZB4UX8zIxk5oeqqZyiDs74eTYS5gAuxcrLf4M2yCm6N7oUawIKxXlJQws6mZM5S5XOR7P1ib-WYJpfLV39xOZe2NWsn_4vVfp27V__cm-IfA1aguB3eqBaSFH7IvUf7mwh_zO_xoQXOwxQjk8i-n1PAt7-Cm4COBQR_IDYgMlbl5AOZ6IWbIGfaTo8iZdjxLpZd7QWstZ4B6i-UnoUAnu8tYqg")
+
+con = OAuthMiddleware(client)
+
+
+
+
+
+
+
 
 
 # from amocrm_api.amojo.hmac_auth_middleware import HmacAuthMiddleware

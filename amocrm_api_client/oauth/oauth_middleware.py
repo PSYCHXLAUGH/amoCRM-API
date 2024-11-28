@@ -33,14 +33,24 @@ class OAuthMiddleware:
         Исключения:
             OAuthError: Если токен доступа отсутствует или недействителен.
         """
-        if not self.oauth_client.access_token:
-            raise OAuthError("No access token available")
+
+        # TODO: Добавить функционал для longlive токенов
+
 
         # Проверка срока действия токена и его обновление, если необходимо
         # Для упрощения здесь это будет базовая проверка.
         # В реальном приложении можно добавить логику для проверки истечения срока действия токена
         # и выполнения запроса на обновление токена через oauth_client.
-        if self.oauth_client.is_token_expired():
+
+
+        if not self.oauth_client.access_token and not self.oauth_client.longlive_token:
+            raise OAuthError("Don't have jwt tokens")
+
+        if self.oauth_client.longlive_token:
+            if self.oauth_client.is_token_expired(self.oauth_client.longlive_token):
+                raise  OAuthError("Token has been expired")
+
+        if self.oauth_client.is_token_expired(self.oauth_client.access_token):
             self.oauth_client.refresh_access_token()
 
     def make_authenticated_request(self, endpoint: str, method: str = "GET", data: dict = None):
