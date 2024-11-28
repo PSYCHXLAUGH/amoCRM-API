@@ -42,13 +42,12 @@ class OAuthMiddleware:
         # В реальном приложении можно добавить логику для проверки истечения срока действия токена
         # и выполнения запроса на обновление токена через oauth_client.
 
-
-        if not self.oauth_client.access_token and not self.oauth_client.longlive_token:
+        if self.oauth_client.access_token is None and self.oauth_client.longlive_token is None:
             raise OAuthError("Don't have jwt tokens")
 
         if self.oauth_client.longlive_token:
             if self.oauth_client.is_token_expired(self.oauth_client.longlive_token):
-                raise  OAuthError("Token has been expired")
+                raise OAuthError("Token has been expired")
 
         if self.oauth_client.is_token_expired(self.oauth_client.access_token):
             self.oauth_client.refresh_access_token()

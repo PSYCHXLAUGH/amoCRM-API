@@ -70,7 +70,7 @@ def _decode_timestamp(timestamp: int) -> str:
     return decoded_time.strftime('%Y-%m-%d %H:%M:%S')
 
 
-def _compare_timestamp_with_current(timestamp: int) -> str:
+def _compare_timestamp_with_current(timestamp: int) -> bool:
     """
     Сравнивает временную метку с текущим временем.
 
@@ -89,8 +89,8 @@ def _compare_timestamp_with_current(timestamp: int) -> str:
     # Сравниваем временную метку с текущим временем
     if decoded_time < current_time:
         "Временная метка меньше текущего времени."
-        return False
+        return True
 
     elif decoded_time >= current_time:
         "Временная метка больше или равна текущему времени."
-        return True
+        return False

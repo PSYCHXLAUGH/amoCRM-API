@@ -74,6 +74,8 @@ class OAuthClient:
 
         self.base_url = f"https://{subdomain}.amocrm.ru"
         self.longlive_token = longlive_token
+
+
         pass
 
     def get_access_token(self, authorization_code: str, subdomain: str) -> Dict[str, str]:
@@ -145,8 +147,9 @@ class OAuthClient:
         Возвращаемое значение:
             Dict[str, str]: Ответ от сервера в виде JSON-словаря.
         """
+
         headers: Dict[str, str] = {
-            "Authorization": f"Bearer {self.access_token}",
+            "Authorization": f"Bearer {self.longlive_token if self.longlive_token else self.access_token}",
             "Content-Type": "application/json"
         }
 
@@ -162,7 +165,7 @@ class OAuthClient:
 
         return response.json()
 
-    def is_token_expired(self, token):
-        decode_jwt = _decode_jwt(token)
-        jwt_exp = decode_jwt['exp']
+    def is_token_expired(self, token) -> bool:
+        jwt = _decode_jwt(token)
+        jwt_exp = jwt['exp']
         return _compare_timestamp_with_current(jwt_exp)
