@@ -16,10 +16,16 @@ class OAuthClient:
         Параметры:
             config (OAuthConfig): Конфигурация OAuth для клиента.
         """
+
         self.config: OAuthConfig = config
         self.access_token: Optional[str] = None
         self.refresh_token: Optional[str] = None
+        self.longlive_token: Optional[str] = None
+        self.api_key: Optional[str] = None
         self.base_url: Optional[str] = None
+
+
+
 
     def get_authorization_url(self, state: Optional[str] = None, mode: Optional[str] = None) -> str:
         """
@@ -54,6 +60,18 @@ class OAuthClient:
         Возвращаемое значение:
             str: Ключ авторизации (пока не реализовано).
         """
+        pass
+
+    def set_oauth_secrets(self, access_token, refresh_token, subdomain) -> bool:
+
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.base_url = f"https://{subdomain}.amocrm.ru"
+
+        pass
+
+    def set_longlive_token(self, longlive_token: str) -> bool:
+        self.longlive_token = longlive_token
         pass
 
     def get_access_token(self, authorization_code: str, subdomain: str) -> Dict[str, str]:

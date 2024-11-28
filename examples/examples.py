@@ -17,6 +17,7 @@ class MyIntegration:
         self.oauth_middleware = OAuthMiddleware(oauth_client)
         oauth_client.get_access_token(authorization_code=authorization_code, subdomain=subdomain)
         self.oauth_middleware.make_authenticated_request(endpoint='api/v4/leads', method='GET')
+        oauth_client.set_tokens()
 
     def create_lead(self):
 
