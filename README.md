@@ -7,14 +7,14 @@ amoCRM API Python Library
 
 # Examples
 
-
 ```python
 from flask import Flask, request, redirect, jsonify
 from amocrm_api_client.oauth.oauth_factory import OAuthFactory
 from amocrm_api_client.oauth.oauth_config import OAuthConfig
-from amocrm_api_client.oauth.oauth_middleware import OAuthMiddleware
+from amocrm_api_client.oauth import OAuthMiddleware
 
 app = Flask(__name__)
+
 
 class MyIntegration:
     def __init__(self, client_id, client_secret, redirect_uri):
@@ -49,6 +49,7 @@ class MyIntegration:
             data=json_data
         )
 
+
 @app.route('/')
 def index():
     """
@@ -62,6 +63,7 @@ def index():
     auth_url = integration.get_authorization_url()
     return f'<a href="{auth_url}">Авторизоваться через AmoCRM</a>'
 
+
 @app.route('/callback')
 def callback():
     """
@@ -71,16 +73,17 @@ def callback():
     subdomain = request.args.get('subdomain')  # Если subdomain передается в запросе
     if not authorization_code:
         return "Ошибка: код авторизации не получен", 400
-    
+
     integration = MyIntegration(
         client_id="your_client_id",
         client_secret="your_client_secret",
         redirect_uri="http://localhost:5000/callback"
     )
-    
+
     # Получаем токен доступа
     token_data = integration.get_access_token(authorization_code, subdomain)
     return jsonify(token_data)
+
 
 @app.route('/create-lead', methods=['POST'])
 def create_lead():
@@ -100,6 +103,7 @@ def create_lead():
     # Создаем лид
     response = integration.create_lead(json_data)
     return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
