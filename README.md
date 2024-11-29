@@ -20,7 +20,6 @@ class MyIntegration:
     def __init__(self, client_id, client_secret, redirect_uri):
         self.config = OAuthConfig(
             client_id=client_id,
-            client_secret=client_secret,
             redirect_uri=redirect_uri
         )
         self.oauth_client = OAuthFactory.create_oauth_client(self.config)

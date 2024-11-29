@@ -1,7 +1,7 @@
 import requests
 from typing import Dict, Optional
 from .exceptions import OAuthError
-from .oauth_config import OAuthConfig
+from .config import OAuthConfig
 from .._utils import _decode_jwt, _compare_timestamp_with_current
 
 class OAuthClient:
@@ -25,6 +25,8 @@ class OAuthClient:
         self.base_url: Optional[str] = None
 
 
+    def get_authorization_button(self):
+        pass
 
 
     def get_authorization_url(self, state: Optional[str] = None, mode: Optional[str] = None) -> str:
@@ -167,7 +169,7 @@ class OAuthClient:
         return response.json()
 
 
-    def _is_token_expired(self, token) -> bool:
+    def is_token_expired(self, token) -> bool:
         if token is None:
             return None
 

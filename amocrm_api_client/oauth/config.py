@@ -30,23 +30,6 @@ class OAuthConfig:
     client_secret: str = ""
     redirect_uri: str = ""
 
-    def __post_init__(self):
-        """
-        Метод, который вызывается автоматически после инициализации объекта.
-
-        Проверяет, были ли явно указаны значения для `client_id`, `client_secret` и `redirect_uri`. Если эти
-        значения не были переданы, они загружаются из переменных окружения:
-            - `AMOCRM_CLIENT_ID` для `client_id`
-            - `AMOCRM_CLIENT_SECRET` для `client_secret`
-            - `AMOCRM_REDIRECT_URI` для `redirect_uri`
-        """
-        if not self.client_id:
-            self.client_id = os.getenv("AMOCRM_CLIENT_ID", self.client_id)
-        if not self.client_secret:
-            self.client_secret = os.getenv("AMOCRM_CLIENT_SECRET", self.client_secret)
-        if not self.redirect_uri:
-            self.redirect_uri = os.getenv("AMOCRM_REDIRECT_URI", self.redirect_uri)
-
 
 @dataclass
 class AmojoConfig:
@@ -55,10 +38,6 @@ class AmojoConfig:
     origin_code: str = ""
 
 
-    def __post_init__(self):
-        if not self.channel_id:
-            self.channel_id = os.getenv("AMOJO_CHANNEL_ID", self.channel_id)
-        if not self.channel_secret:
-            self.client_secret = os.getenv("AMOJO_CHANNEL_SECRET", self.channel_secret)
-        if not self.origin_code:
-            self.origin_code = os.getenv("AMOJO_ORIGIN_CODE", self.origin_code)
+
+class FilesConfig:
+    drive_url: str = ""

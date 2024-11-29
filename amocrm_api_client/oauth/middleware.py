@@ -1,4 +1,4 @@
-from ._oauth_client import OAuthClient
+from .__client import OAuthClient
 from .exceptions import OAuthError, OAuthInvalidTokenError
 
 class OAuthMiddleware:
