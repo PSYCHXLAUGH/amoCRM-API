@@ -1,5 +1,5 @@
-from ._oauth_client import OAuthClient
-from .oauth_config import OAuthConfig
+from .__client import OAuthClient
+from .config import OAuthConfig
 
 class OAuthFactory:
     """

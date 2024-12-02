@@ -4,8 +4,6 @@
 # from amocrm_api_client.security.csrf import CSRFTokenManager
 # from amocrm_api_client.oauth.exceptions import OAuthError
 
-from amocrm_api_client.oauth.__client import _decode_jwt
-
 # class MyIntegration:
 #     def __init__(self, client_id, client_secret, redirect_uri):
 #
